@@ -15,6 +15,8 @@ def scrapping(secao,search,orgPrinc,orgSub):
     driver = webdriver.Chrome(service=service)
     driver.maximize_window()
 
+    time.sleep(2)
+
     driver.get("https://in.gov.br/leiturajornal")
 
     time.sleep(2)

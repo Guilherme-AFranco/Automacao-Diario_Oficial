@@ -101,9 +101,10 @@ for idx, value in enumerate(news):
 
             file_content.replace("\n", "<br>")
 
-            # email.BCC = "stefano.martins@embraer.com.br; guilherme.franco@embraer.com.br; leonardo.fsantos@embraer.com.br"
-            email.BCC = "guilherme.franco@embraer.com.br;"
+            email.BCC = "rafael.marques@embraer.com.br; stefano.martins@embraer.com.br; sergio.bellato@embraer.com.br; guilherme.franco@embraer.com.br; leonardo.fsantos@embraer.com.br"
+            # email.BCC = "guilherme.franco@embraer.com.br;"
             email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
+            # email.Subject = f"{str(section_part[i][:8])} - VERSÃO DE TESTE - {formatted_date}"
 
             email.HTMLBody = file_content
 
