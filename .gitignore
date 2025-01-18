@@ -8,6 +8,8 @@ chromedriver.exe
 automation_diario_test.py
 noticias-do2 - .txt
 noticias-do3 - aeronave.txt
+Scrapping_test.py
+Scrapping_v1.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

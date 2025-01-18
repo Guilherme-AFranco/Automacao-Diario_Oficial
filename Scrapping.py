@@ -89,38 +89,53 @@ def scrapping(secao,search,orgPrinc,orgSub):
 
 
     ## Obtendo as noticias ##
-    noticias = driver.find_elements(By.CLASS_NAME, "resultados-wrapper") # Obtem as classes de noticias existentes na aba
-    noticia_url = {}
+    noticia_url = {} # Dicionario para colocar a url da notícia
     titulo_dou = {} # Dicionario para colocar o titulo da notícia
     texto_dou = {} # Dicionario para texto da noticia
     secao_dou ={} # Dicionario para numero da seção
     data_dou = {}# Dicionario para data de publicação
 
-    for i, noticia in enumerate(noticias):
+    i = 0
+    iterations = 0
+
+    while iterations < 5:
         try:
-            link_element = noticia.find_element(By.TAG_NAME, "a") # Encontrar link
-            noticia_url[f'Noticia {i}'] = link_element.get_attribute("href") # Coletar o link
+            noticias = driver.find_elements(By.CLASS_NAME, "resultados-wrapper") # Obtem as classes de noticias existentes na aba
 
-            driver.execute_script("window.open(arguments[0]);", noticia_url[f'Noticia {i}']) # Abrir em nova aba
-            driver.switch_to.window(driver.window_handles[1]) # Ir para a nova aba
+            for _, noticia in enumerate(noticias):
+                try:
+                    link_element = noticia.find_element(By.TAG_NAME, "a") # Encontrar link
+                    noticia_url[f'Noticia {i}'] = link_element.get_attribute("href") # Coletar o link
 
-            WebDriverWait(driver, 10).until(
-                EC.presence_of_all_elements_located((By.CLASS_NAME, "dou-paragraph"))
-            ) # Esperar o texto da notícia carregar
+                    driver.execute_script("window.open(arguments[0]);", noticia_url[f'Noticia {i}']) # Abrir em nova aba
+                    driver.switch_to.window(driver.window_handles[1]) # Ir para a nova aba
 
-            titulo_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "identifica").text # Coletar titulo
-            texto_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "texto-dou").text # Coletar notícia
-            data_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "publicado-dou-data").text # Coletar data
-            secao_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "secao-dou").text # Coletar secao
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_all_elements_located((By.CLASS_NAME, "dou-paragraph"))
+                    ) # Esperar o texto da notícia carregar
 
-            texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('\n', '<br>')
-            
-            driver.close() # Fechar a aba adicional
-            driver.switch_to.window(driver.window_handles[0])  # Voltar à aba principal
+                    titulo_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "identifica").text # Coletar titulo
+                    texto_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "texto-dou").text # Coletar notícia
+                    data_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "publicado-dou-data").text # Coletar data
+                    secao_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "secao-dou").text # Coletar secao
 
-            noticias = driver.find_elements(By.CLASS_NAME, "resultados-wrapper") # Atualizar a lista das notícias na pagina
-        except Exception as e:
-            print(f"Erro ao processar a notícia {i+1}: {e}") # Se der erro, ele avisa e ficamos tristes
+                    texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('\n', '<br>')
+                    
+                    driver.close() # Fechar a aba adicional
+                    driver.switch_to.window(driver.window_handles[0])  # Voltar à aba principal
+
+                    noticias = driver.find_elements(By.CLASS_NAME, "resultados-wrapper") # Atualizar a lista das notícias na pagina
+                    i += 1
+                except Exception as e:
+                    print(f"Erro ao processar a notícia {i+1}: {e}") # Se der erro, ele avisa e ficamos tristes
+
+            nextPage = driver.find_element(By.CLASS_NAME, "icon-caret-right") # Verifica se existe próxima tela
+            nextPage.click()  # Vai para a próxima tela
+            print("Foi pra proxima pagina")
+            time.sleep(2)
+            iterations += 1
+        except:
+            break # Sai do loop se não existir próxima tela
 
     driver.quit() # Sai da pagina da web
 
@@ -147,4 +162,97 @@ def scrapping(secao,search,orgPrinc,orgSub):
     #         print(f"Erro: {value['error']}") # Se der erro, ficaremos tristes
 
 
+    return noticia_url, titulo_dou, texto_dou, secao_dou, data_dou #, texto_IA
+
+def scrapping_executivo():
+    service = Service(executable_path="chromedriver.exe") # Descomentar para uso no pc do Léo
+    # service = Service(executable_path="E:\Backup_PC\Aplicativos\ChromeDrive\WebDriver\chromedriver.exe") # Descomentar para uso no pc do Gui
+    driver = webdriver.Chrome(service=service)
+    driver.maximize_window()
+    time.sleep(2)
+
+    driver.get("https://in.gov.br/leiturajornal")
+    time.sleep(2)
+
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.XPATH, "//a[contains(@class, 'button secao_2_hover')]"))
+    )
+
+    secao_n = driver.find_element(By.XPATH, "//a[contains(@class, 'button secao_2_hover')]")
+    secao_n.click()
+    time.sleep (1)
+
+    WebDriverWait(driver, 12).until(
+        EC.presence_of_all_elements_located((By.ID, "slcOrgs"))
+    )
+
+    secao_n = driver.find_element(By.ID, "slcOrgs")
+    secao_n.click()
+    time.sleep(2)
+
+
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, "dropdown-item"))
+    )
+    try:
+        org_principal = driver.find_element(By.XPATH, "//a[contains(text(), 'Atos do Poder Executivo')]")
+        org_principal.click()
+        time.sleep(2)
+
+    except:
+        driver.quit()
+        return {}, {}, {}, {}, {}
+    
+
+    ## Obtendo as noticias ##
+    noticia_url = {} # Dicionario para colocar a url da notícia
+    titulo_dou = {} # Dicionario para colocar o titulo da notícia
+    texto_dou = {} # Dicionario para texto da noticia
+    secao_dou ={} # Dicionario para numero da seção
+    data_dou = {}# Dicionario para data de publicação
+
+    i = 0
+    iterations = 0
+
+    while iterations < 5:
+        try:
+            noticias = driver.find_elements(By.CLASS_NAME, "resultados-wrapper") # Obtem as classes de noticias existentes na aba
+
+            for _, noticia in enumerate(noticias):
+                try:
+                    link_element = noticia.find_element(By.TAG_NAME, "a") # Encontrar link
+                    noticia_url[f'Noticia {i}'] = link_element.get_attribute("href") # Coletar o link
+
+                    driver.execute_script("window.open(arguments[0]);", noticia_url[f'Noticia {i}']) # Abrir em nova aba
+                    driver.switch_to.window(driver.window_handles[1]) # Ir para a nova aba
+
+                    WebDriverWait(driver, 10).until(
+                        EC.presence_of_all_elements_located((By.CLASS_NAME, "dou-paragraph"))
+                    ) # Esperar o texto da notícia carregar
+
+                    titulo_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "identifica").text # Coletar titulo
+                    texto_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "texto-dou").text # Coletar notícia
+                    data_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "publicado-dou-data").text # Coletar data
+                    secao_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "secao-dou").text # Coletar secao
+
+                    texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('\n', '<br>')
+                    
+                    driver.close() # Fechar a aba adicional
+                    driver.switch_to.window(driver.window_handles[0])  # Voltar à aba principal
+
+                    noticias = driver.find_elements(By.CLASS_NAME, "resultados-wrapper") # Atualizar a lista das notícias na pagina
+                    i += 1
+                except Exception as e:
+                    print(f"Erro ao processar a notícia {i+1}: {e}") # Se der erro, ele avisa e ficamos tristes
+
+            nextPage = driver.find_element(By.CLASS_NAME, "icon-caret-right") # Verifica se existe próxima tela
+            nextPage.click()  # Vai para a próxima tela
+            print("Foi pra proxima pagina")
+            time.sleep(2)
+            iterations += 1
+        except:
+            break # Sai do loop se não existir próxima tela
+
+    driver.quit() # Sai da pagina da web
+    
     return noticia_url, titulo_dou, texto_dou, secao_dou, data_dou #, texto_IA
