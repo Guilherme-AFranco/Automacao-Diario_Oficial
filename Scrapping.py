@@ -2,14 +2,14 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service 
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC 
 import time
 
 # from Gemini import *
 
 
-def scrapping(secao,search,orgPrinc,orgSub):
+def scrapping(secao,search,orgPrinc,orgSub,index):
     service = Service(executable_path="chromedriver.exe") # Descomentar para uso no pc do Léo
     # service = Service(executable_path="E:\Backup_PC\Aplicativos\ChromeDrive\WebDriver\chromedriver.exe") # Descomentar para uso no pc do Gui
     driver = webdriver.Chrome(service=service)
@@ -95,7 +95,7 @@ def scrapping(secao,search,orgPrinc,orgSub):
     secao_dou ={} # Dicionario para numero da seção
     data_dou = {}# Dicionario para data de publicação
 
-    i = 0
+    i = index
     iterations = 0
 
     while iterations < 5:
@@ -183,22 +183,12 @@ def scrapping_executivo():
     time.sleep (1)
 
     WebDriverWait(driver, 12).until(
-        EC.presence_of_all_elements_located((By.ID, "slcOrgs"))
+        EC.presence_of_element_located((By.ID, "slcOrgs"))
     )
 
-    secao_n = driver.find_element(By.ID, "slcOrgs")
-    secao_n.click()
-    time.sleep(2)
-
-
-    WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CLASS_NAME, "dropdown-item"))
-    )
     try:
-        org_principal = driver.find_element(By.XPATH, "//a[contains(text(), 'Atos do Poder Executivo')]")
-        org_principal.click()
-        time.sleep(2)
-
+        select_element = Select(driver.find_element(By.ID, "slcOrgs"))
+        select_element.select_by_visible_text("Presidência da República")  # Exemplo de seleção
     except:
         driver.quit()
         return {}, {}, {}, {}, {}
@@ -214,7 +204,7 @@ def scrapping_executivo():
     i = 0
     iterations = 0
 
-    while iterations < 5:
+    while iterations < 1:
         try:
             noticias = driver.find_elements(By.CLASS_NAME, "resultados-wrapper") # Obtem as classes de noticias existentes na aba
 
@@ -245,7 +235,7 @@ def scrapping_executivo():
                 except Exception as e:
                     print(f"Erro ao processar a notícia {i+1}: {e}") # Se der erro, ele avisa e ficamos tristes
 
-            nextPage = driver.find_element(By.CLASS_NAME, "icon-caret-right") # Verifica se existe próxima tela
+            nextPage = driver.find_element(By.XPATH, "//span[contains(@class, 'pagination-button') and contains(text(), 'Próximo »')]")
             nextPage.click()  # Vai para a próxima tela
             print("Foi pra proxima pagina")
             time.sleep(2)

@@ -14,9 +14,27 @@ text = {}
 data = {}
 section = {}
 
-for i in range(len(secao)):
-    news[f'{secao[i]} - {search[i]}'], title[f'{secao[i]} - {search[i]}'], text[f'{secao[i]} - {search[i]}'], section[f'{secao[i]} - {search[i]}'], data[f'{secao[i]} - {search[i]}'] = scrapping(secao[i],search[i], orgPrinc[i], orgSub[i])
+# Inclusao de atos de poder executivo da seção 2
+news['do2 - atos'], title['do2 - atos'], text['do2 - atos'], section['do2 - atos'], data['do2 - atos'] = scrapping_executivo()
 
+# Verificação do indice para noticias do2
+if 'do2' in news:
+    idx = len(news['do2'])
+else:
+    idx = 0
+
+for i in range(len(secao)):
+    if secao[i]=='do2':
+        news[f'{secao[i]}'], title[f'{secao[i]}'], text[f'{secao[i]}'], section[f'{secao[i]}'], data[f'{secao[i]}'] = scrapping(secao[i],search[i], orgPrinc[i], orgSub[i],idx)
+    else:
+        news[f'{secao[i]}'], title[f'{secao[i]}'], text[f'{secao[i]}'], section[f'{secao[i]}'], data[f'{secao[i]}'] = scrapping(secao[i],search[i], orgPrinc[i], orgSub[i],0)
+
+
+news['do2'] = {**news["do2 - atos"],**news["do2"]}
+title['do2'] = {**title["do2 - atos"],**title["do2"]}
+text['do2'] = {**text["do2 - atos"],**text["do2"]}
+data['do2'] = {**data["do2 - atos"],**data["do2"]}
+section['do2'] = {**section["do2 - atos"],**section["do2"]}
 
 ## Coleta de noticias pela IA Gemini ##
 # results = gemini_analysis(titulo_dou,texto_dou) # Faz a analise a partir de IA na função vista pelo código Gemini.py
@@ -101,10 +119,10 @@ for idx, value in enumerate(news):
 
             file_content.replace("\n", "<br>")
 
-            email.BCC = "rafael.marques@embraer.com.br; stefano.martins@embraer.com.br; sergio.bellato@embraer.com.br; guilherme.franco@embraer.com.br; leonardo.fsantos@embraer.com.br"
-            # email.BCC = "guilherme.franco@embraer.com.br;"
-            email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
-            # email.Subject = f"{str(section_part[i][:8])} - VERSÃO DE TESTE - {formatted_date}"
+            # email.BCC = "rafael.marques@embraer.com.br; stefano.martins@embraer.com.br; sergio.bellato@embraer.com.br; guilherme.franco@embraer.com.br; leonardo.fsantos@embraer.com.br"
+            email.BCC = "guilherme.franco@embraer.com.br;"
+            # email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
+            email.Subject = f"{str(section_part[i][:8])} - VERSÃO DE TESTE - {formatted_date}"
 
             email.HTMLBody = file_content
 
