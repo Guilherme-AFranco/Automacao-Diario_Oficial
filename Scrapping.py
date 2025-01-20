@@ -85,7 +85,7 @@ def scrapping(secao,search,orgPrinc,orgSub,index):
             org_Subordinada.click()
         except:
             driver.quit()
-            return {}, {}, {}, {}, {}
+            return {}, {}, {}, {}, {}, {}
 
 
     ## Obtendo as noticias ##
@@ -94,6 +94,7 @@ def scrapping(secao,search,orgPrinc,orgSub,index):
     texto_dou = {} # Dicionario para texto da noticia
     secao_dou ={} # Dicionario para numero da seção
     data_dou = {}# Dicionario para data de publicação
+    sub_dou = {}
 
     i = index
     iterations = 0
@@ -118,6 +119,7 @@ def scrapping(secao,search,orgPrinc,orgSub,index):
                     texto_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "texto-dou").text # Coletar notícia
                     data_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "publicado-dou-data").text # Coletar data
                     secao_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "secao-dou").text # Coletar secao
+                    sub_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "orgao-dou-data").text # Coletar orgao
 
                     texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('\n', '<br>')
                     
@@ -162,7 +164,7 @@ def scrapping(secao,search,orgPrinc,orgSub,index):
     #         print(f"Erro: {value['error']}") # Se der erro, ficaremos tristes
 
 
-    return noticia_url, titulo_dou, texto_dou, secao_dou, data_dou #, texto_IA
+    return noticia_url, titulo_dou, texto_dou, secao_dou, data_dou, sub_dou #, texto_IA
 
 def scrapping_executivo():
     service = Service(executable_path="chromedriver.exe") # Descomentar para uso no pc do Léo
@@ -189,9 +191,10 @@ def scrapping_executivo():
     try:
         select_element = Select(driver.find_element(By.ID, "slcOrgs"))
         select_element.select_by_visible_text("Presidência da República")  # Exemplo de seleção
+        # select_element.select_by_visible_text("Atos do Poder Executivo")  # Exemplo de seleção
     except:
         driver.quit()
-        return {}, {}, {}, {}, {}
+        return {}, {}, {}, {}, {}, {}
     
 
     ## Obtendo as noticias ##
@@ -200,6 +203,7 @@ def scrapping_executivo():
     texto_dou = {} # Dicionario para texto da noticia
     secao_dou ={} # Dicionario para numero da seção
     data_dou = {}# Dicionario para data de publicação
+    sub_dou = {}
 
     i = 0
     iterations = 0
@@ -224,6 +228,7 @@ def scrapping_executivo():
                     texto_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "texto-dou").text # Coletar notícia
                     data_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "publicado-dou-data").text # Coletar data
                     secao_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "secao-dou").text # Coletar secao
+                    sub_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "orgao-dou-data").text # Coletar orgão
 
                     texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('\n', '<br>')
                     
@@ -245,4 +250,4 @@ def scrapping_executivo():
 
     driver.quit() # Sai da pagina da web
     
-    return noticia_url, titulo_dou, texto_dou, secao_dou, data_dou #, texto_IA
+    return noticia_url, titulo_dou, texto_dou, secao_dou, data_dou, sub_dou #, texto_IA

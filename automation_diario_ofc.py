@@ -13,9 +13,10 @@ title = {}
 text = {}
 data = {}
 section = {}
+sub = {}
 
 # Inclusao de atos de poder executivo da seção 2
-news['do2 - atos'], title['do2 - atos'], text['do2 - atos'], section['do2 - atos'], data['do2 - atos'] = scrapping_executivo()
+news['do2 - atos'], title['do2 - atos'], text['do2 - atos'], section['do2 - atos'], data['do2 - atos'], sub['do2 - atos'] = scrapping_executivo()
 
 # Verificação do indice para noticias do2
 if 'do2' in news:
@@ -25,9 +26,9 @@ else:
 
 for i in range(len(secao)):
     if secao[i]=='do2':
-        news[f'{secao[i]}'], title[f'{secao[i]}'], text[f'{secao[i]}'], section[f'{secao[i]}'], data[f'{secao[i]}'] = scrapping(secao[i],search[i], orgPrinc[i], orgSub[i],idx)
+        news[f'{secao[i]}'], title[f'{secao[i]}'], text[f'{secao[i]}'], section[f'{secao[i]}'], data[f'{secao[i]}'], sub[f'{secao[i]}']  = scrapping(secao[i],search[i], orgPrinc[i], orgSub[i],idx)
     else:
-        news[f'{secao[i]}'], title[f'{secao[i]}'], text[f'{secao[i]}'], section[f'{secao[i]}'], data[f'{secao[i]}'] = scrapping(secao[i],search[i], orgPrinc[i], orgSub[i],0)
+        news[f'{secao[i]}'], title[f'{secao[i]}'], text[f'{secao[i]}'], section[f'{secao[i]}'], data[f'{secao[i]}'], sub[f'{secao[i]}'] = scrapping(secao[i],search[i], orgPrinc[i], orgSub[i],0)
 
 
 news['do2'] = {**news["do2 - atos"],**news["do2"]}
@@ -35,7 +36,16 @@ title['do2'] = {**title["do2 - atos"],**title["do2"]}
 text['do2'] = {**text["do2 - atos"],**text["do2"]}
 data['do2'] = {**data["do2 - atos"],**data["do2"]}
 section['do2'] = {**section["do2 - atos"],**section["do2"]}
+sub['do2'] = {**sub["do2 - atos"],**sub["do2"]}
 
+if 'do2 - atos' in news:
+    news.pop('do2 - atos')
+    title.pop('do2 - atos')
+    text.pop('do2 - atos')
+    data.pop('do2 - atos')
+    section.pop('do2 - atos')
+    sub.pop('do2 - atos')
+    
 ## Coleta de noticias pela IA Gemini ##
 # results = gemini_analysis(titulo_dou,texto_dou) # Faz a analise a partir de IA na função vista pelo código Gemini.py
 
@@ -69,6 +79,7 @@ for idx, value in enumerate(news):
         url_part = []
         section_part = []
         pub_date_part = []
+        sub_part = []
         current_date = datetime.now().date()
         formatted_date = current_date.strftime("%B %d, %Y")
         html_template = []
@@ -80,6 +91,7 @@ for idx, value in enumerate(news):
             url_part.append(f"{news[value][f'Noticia {i}']}")
             section_part.append(f"{section[value][f'Noticia {i}']}")
             pub_date_part.append(f"{data[value][f'Noticia {i}']}")
+            sub_part.append(f"{sub[value][f'Noticia {i}']}")
             html_template.append(f"""
                     <tr>
                         <td style="width: auto; vertical-align: top;">
@@ -89,6 +101,7 @@ for idx, value in enumerate(news):
                                     <span style="color: #002060; font-family: 'Arial Black'; font-size: 11pt;">{str(titulo_part[i])}</span>
                                 </a>
                             </h4>
+                            <p class="date">{str(sub_part[i])}</p>
                         </td>
                     </tr>
                     <tr>
@@ -119,7 +132,7 @@ for idx, value in enumerate(news):
 
             file_content.replace("\n", "<br>")
 
-            # email.BCC = "rafael.marques@embraer.com.br; stefano.martins@embraer.com.br; sergio.bellato@embraer.com.br; guilherme.franco@embraer.com.br; leonardo.fsantos@embraer.com.br"
+            # email.BCC = "rafael.marques@embraer.com.br; stefano.martins@embraer.com.br; guilherme.franco@embraer.com.br; leonardo.fsantos@embraer.com.br"
             email.BCC = "guilherme.franco@embraer.com.br;"
             # email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
             email.Subject = f"{str(section_part[i][:8])} - VERSÃO DE TESTE - {formatted_date}"
