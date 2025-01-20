@@ -95,7 +95,7 @@ for idx, value in enumerate(news):
             html_template.append(f"""
                     <tr>
                         <td style="width: auto; vertical-align: top;">
-                            <h4 style="display: inline;">
+                            <h4 style="display: inline; margin-bottom: 0;">
                                 <a href="{str(url_part[i])}">
                                     <span style="color: #ed7d31; font-family: 'Arial Black'; font-size: 11pt;">{str(section_part[i][:8])}|</span>
                                     <span style="color: #002060; font-family: 'Arial Black'; font-size: 11pt;">{str(titulo_part[i])}</span>

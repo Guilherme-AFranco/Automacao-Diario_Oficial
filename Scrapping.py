@@ -121,6 +121,9 @@ def scrapping(secao,search,orgPrinc,orgSub,index):
                     secao_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "secao-dou").text # Coletar secao
                     sub_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "orgao-dou-data").text # Coletar orgao
 
+                    texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('Objeto:', '\n<b>Objeto:</b>')
+                    texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('Contratante:', '\n<b>Contratante:</b>')
+                    texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('Contratado:', '\n<b>Contratado:</b>')
                     texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('\n', '<br>')
                     
                     driver.close() # Fechar a aba adicional
@@ -190,8 +193,8 @@ def scrapping_executivo():
 
     try:
         select_element = Select(driver.find_element(By.ID, "slcOrgs"))
-        select_element.select_by_visible_text("Presidência da República")  # Exemplo de seleção
-        # select_element.select_by_visible_text("Atos do Poder Executivo")  # Exemplo de seleção
+        # select_element.select_by_visible_text("Presidência da República")  # Exemplo de seleção
+        select_element.select_by_visible_text("Atos do Poder Executivo")  # Exemplo de seleção
     except:
         driver.quit()
         return {}, {}, {}, {}, {}, {}
@@ -230,6 +233,9 @@ def scrapping_executivo():
                     secao_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "secao-dou").text # Coletar secao
                     sub_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "orgao-dou-data").text # Coletar orgão
 
+                    texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('Objeto:', '\n<b>Objeto:</b>')
+                    texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('Contratante:', '\n<b>Contratante:</b>')
+                    texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('Contratado:', '\n<b>Contratado:</b>')
                     texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('\n', '<br>')
                     
                     driver.close() # Fechar a aba adicional
