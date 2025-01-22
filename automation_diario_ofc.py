@@ -19,8 +19,8 @@ sub = {}
 news['do2 - atos'], title['do2 - atos'], text['do2 - atos'], section['do2 - atos'], data['do2 - atos'], sub['do2 - atos'] = scrapping_executivo()
 
 # Verificação do indice para noticias do2
-if 'do2' in news:
-    idx = len(news['do2'])
+if 'do2 - atos' in news.keys():
+    idx = len(news['do2 - atos'])
 else:
     idx = 0
 
@@ -38,7 +38,7 @@ data['do2'] = {**data["do2 - atos"],**data["do2"]}
 section['do2'] = {**section["do2 - atos"],**section["do2"]}
 sub['do2'] = {**sub["do2 - atos"],**sub["do2"]}
 
-if 'do2 - atos' in news:
+if 'do2 - atos' in news.keys():
     news.pop('do2 - atos')
     title.pop('do2 - atos')
     text.pop('do2 - atos')
@@ -132,10 +132,10 @@ for idx, value in enumerate(news):
 
             file_content.replace("\n", "<br>")
 
-            # email.BCC = "rafael.marques@embraer.com.br; stefano.martins@embraer.com.br; guilherme.franco@embraer.com.br; leonardo.fsantos@embraer.com.br"
-            email.BCC = "guilherme.franco@embraer.com.br;"
-            # email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
-            email.Subject = f"{str(section_part[i][:8])} - VERSÃO DE TESTE - {formatted_date}"
+            email.BCC = "rafael.marques@embraer.com.br; stefano.martins@embraer.com.br; guilherme.franco@embraer.com.br; leonardo.fsantos@embraer.com.br"
+            # email.BCC = "guilherme.franco@embraer.com.br;"
+            email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
+            # email.Subject = f"{str(section_part[i][:8])} - VERSÃO DE TESTE - {formatted_date}"
 
             email.HTMLBody = file_content
 
