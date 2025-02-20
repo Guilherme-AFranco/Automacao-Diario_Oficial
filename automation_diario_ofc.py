@@ -87,11 +87,41 @@ for idx, value in enumerate(news):
         # Criando cada noticia em uma string html_template
         for i in range(0, int(len(title[value]))):
             titulo_part.append(f"{title[value][f'Noticia {i}']}.")
-            body_part.append(f"{text[value][f'Noticia {i}']}")
             url_part.append(f"{news[value][f'Noticia {i}']}")
             section_part.append(f"{section[value][f'Noticia {i}']}")
             pub_date_part.append(f"{data[value][f'Noticia {i}']}")
             sub_part.append(f"{sub[value][f'Noticia {i}']}")
+            
+            text[value][f'Noticia {i}'] = text[value][f'Noticia {i}'].replace("<div class=\"texto-dou\"><br> <br> <br>  <p class=\"identifica\">","")
+            text[value][f'Noticia {i}'] = text[value][f'Noticia {i}'].replace("  <p class=\"dou-paragraph\">","")
+            text[value][f'Noticia {i}'] = text[value][f'Noticia {i}'].replace("<p class=\"dou-paragraph\">","")
+            text[value][f'Noticia {i}'] = text[value][f'Noticia {i}'].replace("</p>","")
+            text[value][f'Noticia {i}'] = text[value][f'Noticia {i}'].replace("  <p class=\"assina\">","")
+            text[value][f'Noticia {i}'] = text[value][f'Noticia {i}'].replace("</div>","")
+            text[value][f'Noticia {i}'] = text[value][f'Noticia {i}'].replace("<br>","\n")
+            text[value][f'Noticia {i}'] = text[value][f'Noticia {i}'].replace("<table class=\"dou-table\">","<table class=\"description-table\">")
+            text[value][f'Noticia {i}'] = text[value][f'Noticia {i}'].replace("\n  <p class=\"identifica\">",f"""</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: auto; vertical-align: top;">
+                    <h4 style="display: inline; margin-bottom: 0;">
+                        <a href="{str(url_part[i])}">
+                            <span style="color: #ed7d31; font-family: 'Arial Black'; font-size: 11pt;">{str(section_part[i][:8])}|</span>
+                            <span style="color: #002060; font-family: 'Arial Black'; font-size: 11pt;">{str(titulo_part[i])}</span>
+                        </a>
+                    </h4>
+                    <p class="date">{str(sub_part[i])}</p>
+                </td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top;">
+                    <p class="date">{str(pub_date_part[i])}</p>
+                    <p class="description">
+            """)
+            # text[value][f'Noticia {i}'] = text[value][f'Noticia {i}'].replace('\n', '<br>')
+            
+            body_part.append(f"{text[value][f'Noticia {i}']}")
             html_template.append(f"""
                     <tr>
                         <td style="width: auto; vertical-align: top;">
@@ -132,8 +162,8 @@ for idx, value in enumerate(news):
 
             file_content.replace("\n", "<br>")
 
-            email.BCC = "rafael.marques@embraer.com.br; stefano.martins@embraer.com.br; guilherme.franco@embraer.com.br; leonardo.fsantos@embraer.com.br"
-            # email.BCC = "guilherme.franco@embraer.com.br;"
+            email.BCC = "fabio.caparica@embraer.com.br; sergio.bellato@embraer.com.br; rafael.marques@embraer.com.br; stefano.martins@embraer.com.br; guilherme.franco@embraer.com.br; leonardo.fsantos@embraer.com.br; "
+            # email.BCC = "guilherme.franco@embraer.com.br; "
             email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
             # email.Subject = f"{str(section_part[i][:8])} - VERSÃO DE TESTE - {formatted_date}"
 

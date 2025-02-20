@@ -21,6 +21,15 @@
             text-align: justify;
             font-size: 10pt;
         }
+        table.description-table, table.description-table td {
+        color: #7F7F7F;
+        font-family: Arial;
+        text-align: justify;
+        font-size: 10pt;
+        border: 1px solid #ddd;
+        border-collapse: collapse;
+        padding: 8px;
+        }
     </style>
 </head>
 

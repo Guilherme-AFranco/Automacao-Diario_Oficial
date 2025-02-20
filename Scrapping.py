@@ -116,7 +116,8 @@ def scrapping(secao,search,orgPrinc,orgSub,index):
                     ) # Esperar o texto da notícia carregar
 
                     titulo_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "identifica").text # Coletar titulo
-                    texto_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "texto-dou").text # Coletar notícia
+                    # texto_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "texto-dou").text # Coletar notícia
+                    texto_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "texto-dou").get_attribute('outerHTML') # Coletar notícia
                     data_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "publicado-dou-data").text # Coletar data
                     secao_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "secao-dou").text # Coletar secao
                     sub_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "orgao-dou-data").text # Coletar orgao
@@ -125,7 +126,7 @@ def scrapping(secao,search,orgPrinc,orgSub,index):
                     texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('Contratante:', '\n<b>Contratante:</b>')
                     texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('Contratado:', '\n<b>Contratado:</b>')
                     texto_dou[f'Noticia {i}'] = texto_dou[f'Noticia {i}'].replace('\n', '<br>')
-                    
+                    print(texto_dou[f'Noticia {i}'])
                     driver.close() # Fechar a aba adicional
                     driver.switch_to.window(driver.window_handles[0])  # Voltar à aba principal
 
@@ -228,7 +229,8 @@ def scrapping_executivo():
                     ) # Esperar o texto da notícia carregar
 
                     titulo_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "identifica").text # Coletar titulo
-                    texto_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "texto-dou").text # Coletar notícia
+                    # texto_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "texto-dou").text # Coletar notícia
+                    texto_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "texto-dou").get_attribute('outerHTML') # Coletar notícia
                     data_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "publicado-dou-data").text # Coletar data
                     secao_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "secao-dou").text # Coletar secao
                     sub_dou[f'Noticia {i}'] = driver.find_element(By.CLASS_NAME, "orgao-dou-data").text # Coletar orgão
