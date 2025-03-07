@@ -1,0 +1,13 @@
+
+        </tbody>
+    </table>
+
+    <p></p>
+    <p> Best regards| Atenciosamente, </p>
+    <p> Signature </p>
+
+    <img src="https://IMAGEM.com" alt="" width="144" height="40"
+        style="float: right; margin-right: 10pt;" /></td> </a>
+</body>
+
+</html>

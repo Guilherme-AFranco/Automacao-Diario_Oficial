@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diário Oficial / Company</title>
+    <style>
+        p.date {
+            color: #002060;
+            font-family: Arial;
+            text-align: start;
+            font-weight: bold;
+            font-size: 8pt;
+            text-transform: uppercase;
+        }
+
+        p.description {
+            color: #7F7F7F;
+            font-family: Arial;
+            text-align: justify;
+            font-size: 10pt;
+        }
+        table.description-table, table.description-table td {
+        color: #7F7F7F;
+        font-family: Arial;
+        text-align: justify;
+        font-size: 10pt;
+        border: 1px solid #ddd;
+        border-collapse: collapse;
+        padding: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <p> Bom dia! Segue o resumo do diário oficial. </p>
+    <p></p>
+    <table style="align-items: center; width: 95%; border-collapse:collapse; border-color: #7f7f7f; display:block;" border="1">
+        <tbody>
