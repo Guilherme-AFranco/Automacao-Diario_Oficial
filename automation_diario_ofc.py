@@ -152,10 +152,14 @@ for idx, value in enumerate(news):
                         <p class="date">{str(pub_date_part[i])}</p>
                         <p class="description">
                 """)
-            text[value][val] = text[value][val].replace("<p class=\"identifica\">","\n")
-            text[value][val] = text[value][val].replace("<p class=\"cargo\">","\n")
-            text[value][val] = text[value][val].replace("<div class=\"texto-dou\">","\n")
-            text[value][val] = text[value][val].replace("<p class=\"titulo\">","\n")
+            text[value][val] = text[value][val].replace("<p class=\"identifica\">","")
+            text[value][val] = text[value][val].replace("<p class=\"cargo\">","")
+            text[value][val] = text[value][val].replace("<div class=\"texto-dou\">","")
+            text[value][val] = text[value][val].replace("<p class=\"titulo\">","")
+            text[value][val] = text[value][val].replace("<p class=\"data\">","")
+            text[value][val] = text[value][val].replace("<p class=\"assinaPr\">","")
+            text[value][val] = text[value][val].replace("<p class=\"ementa\">","")
+            text[value][val] = text[value][val].replace("<p class=\"anexo\">","")
 
             body_part.append(f"{text[value][val]}")
             html_template.append(f"""
