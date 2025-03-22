@@ -17,6 +17,8 @@ automation_diario_local.py
 automation_diario_ofc_local.py
 html_draft_start_local.txt
 html_draft_end_local.txt
+automation_diario_local_v0.py
+Scrapping_v0.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
