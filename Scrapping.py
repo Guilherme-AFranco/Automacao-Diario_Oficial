@@ -7,6 +7,12 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from datetime import datetime, timedelta
 
+def previous_business_day(date):
+    if date.weekday() == 0:
+        return date - timedelta(days=3)
+    else:
+        return date - timedelta(days=1)
+    
 def replace_newlines_in_description(match):
     content = match.group(1)
     content = content.replace("\n", "<br>")
@@ -32,7 +38,7 @@ def scrapping(secao,search,orgPrinc,orgSub,index):
     secao_n = driver.find_element(By.ID, secao)
     secao_n.click()
     time.sleep(2)
-    ontem = datetime.today() - timedelta(days=1)
+    ontem = previous_business_day(datetime.today())
     data_formatada = ontem.strftime("%d/%m/%Y")
     dia = driver.find_element(By.ID, "personalizado") # Voltar para "dia" dps (tinha poucas noticias com parametro "dia")
     dia.click()

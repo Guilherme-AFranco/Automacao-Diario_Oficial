@@ -4,10 +4,10 @@ from Scrapping import *
 import re
 
 # Coleta das informações da web ##
-secao = ["do1", "do1", "do1", "do2", "do2", "do3", "do3"] # Seções a analisar
-search = ["", "", "", "", "",  "aeronave", ""] # # Pesquisas a analisar com base nas seções
-orgPrinc = ["Atos do Poder Executivo", "Ministério da Defesa", "Ministério da Defesa", "Atos do Poder Executivo", "Ministério da Defesa", "", "Ministério da Defesa"]
-orgSub = ["", "Comando da Aeronáutica", "Gabinete do Ministro", "", "Comando da Aeronáutica", "", "Comando da Aeronáutica"]
+secao = ["do1", "do1", "do1", "do2", "do2", "do3", "do3", "doe"] # Seções a analisar
+search = ["", "", "", "", "",  "aeronave", "", ""] # Pesquisas a analisar com base nas seções
+orgPrinc = ["Atos do Poder Executivo", "Ministério da Defesa", "Ministério da Defesa", "Atos do Poder Executivo", "Ministério da Defesa", "", "Ministério da Defesa", ""]
+orgSub = ["", "Comando da Aeronáutica", "Gabinete do Ministro", "", "Comando da Aeronáutica", "", "Comando da Aeronáutica", ""]
 
 news = {}
 title = {}
@@ -57,7 +57,7 @@ for idx, value in enumerate(news):
         section_part = []
         pub_date_part = []
         sub_part = []
-        current_date = datetime.today() - timedelta(days=1)
+        current_date = previous_business_day(datetime.today())
         formatted_date = current_date.strftime("%B %d, %Y")
         html_template = []
         for i, val in enumerate(title[value].keys()):
@@ -147,10 +147,12 @@ for idx, value in enumerate(news):
 
 
 
-            if idx == 2:
+            if value == 'do3':
                 email.Subject = f"{str(section_part[i][:8])} (Aeronave) - Resumo Diário Oficial - {formatted_date}"
-            elif idx == 3:
+            elif value == 'do3 (FAB)':
                 email.Subject = f"{str(section_part[i][:8])} (FAB) - Resumo Diário Oficial - {formatted_date}"
+            elif value == 'doe':
+                email.Subject = f"{str(section_part[7][:7])+str(section_part[7][11:16])} - Resumo Diário Oficial - {formatted_date}"
             else:
                 email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
             email.HTMLBody = file_content
