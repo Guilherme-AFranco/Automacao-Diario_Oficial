@@ -176,7 +176,11 @@ def scrapping(secao,search,orgPrinc,orgSub,index,secaoExtra):
     driver = webdriver.Chrome(service=service)
     driver.maximize_window()
     time.sleep(2)
-    driver.get("https://in.gov.br/leiturajornal")
+    try:
+        driver.get("https://www.in.gov.br/leiturajornal")
+    except Exception as e:
+        print('Erro ao abrir o DOI',e)
+        time.sleep(5)
     time.sleep(2)
     WebDriverWait(driver, 2).until(
         EC.presence_of_all_elements_located((By.ID, "toggle-search-advanced"))
@@ -192,6 +196,7 @@ def scrapping(secao,search,orgPrinc,orgSub,index,secaoExtra):
     time.sleep(2)
     ontem = previous_business_day(datetime.today())
     data_formatada = ontem.strftime("%d/%m/%Y")
+    # data_formatada = "23/04/2025" # Modificar manualmente quando houver feriados
     dia = driver.find_element(By.ID, "personalizado") # Voltar para "dia" dps (tinha poucas noticias com parametro "dia")
     dia.click()
     data_inicio = driver.find_element(By.ID, "data-inicio")
@@ -234,7 +239,7 @@ def scrapping(secao,search,orgPrinc,orgSub,index,secaoExtra):
             except:
                 print(f'Não há busca para {secao}-{orgPrinc}')
                 driver.quit()
-                return {},{},{},{},{},{}
+                return {},{},{},{},{},{},data_formatada
             time.sleep(2)
         if orgSub!='':
             WebDriverWait(driver, 10).until(
@@ -251,7 +256,7 @@ def scrapping(secao,search,orgPrinc,orgSub,index,secaoExtra):
             except:
                 print(f'Não há busca para {secao}-{orgPrinc}-{orgSub}')
                 driver.quit()
-                return {},{},{},{},{},{}
+                return {},{},{},{},{},{},data_formatada
         time.sleep(5)
     ## Obtendo as noticias ##
     noticia_url = {} # Dicionario para colocar a url da notícia
@@ -355,4 +360,4 @@ def scrapping(secao,search,orgPrinc,orgSub,index,secaoExtra):
             print(f'Não há mais páginas para carregar na pesquisa {secao}-{orgPrinc}-{orgSub}-{search}')
             break # Sai do loop se não existir próxima tela
     driver.quit() # Sai da pagina da web
-    return noticia_url, titulo_dou, texto_dou, secao_dou, data_dou, sub_dou
+    return noticia_url, titulo_dou, texto_dou, secao_dou, data_dou, sub_dou, data_formatada

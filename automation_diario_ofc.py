@@ -131,36 +131,40 @@ for idx, value in enumerate(news):
                 arquivo.write(html_template[i])
         with open(f"noticias-{value}.txt", "a") as noticias_file:
             noticias_file.write(html_draft_end)
-        try:
-            ## Gerando o email ##
-            outlook = win32.Dispatch('Outlook.Application') # cria integração com o outlook
-            email = outlook.CreateItem(0) # Cria e-mail
-            # Configurações do e-mail
-            with open(f"noticias-{value}.txt","r", encoding="utf-8") as file:
-                file_content = file.read()
-            # Usar regex para encontrar e substituir o conteúdo dentro de <p class="description"></p>
-            file_content = re.sub(r'<p class="description">(.*?)</p>', replace_newlines_in_description, file_content, flags=re.DOTALL)
+        confirm = input('Você deseja realizar o envio? (s/n)')
+        if confirm.lower() == 's':
+            try:
+                ## Gerando o email ##
+                outlook = win32.Dispatch('Outlook.Application') # cria integração com o outlook
+                email = outlook.CreateItem(0) # Cria e-mail
+                # Configurações do e-mail
+                with open(f"noticias-{value}.txt","r", encoding="utf-8") as file:
+                    file_content = file.read()
+                # Usar regex para encontrar e substituir o conteúdo dentro de <p class="description"></p>
+                file_content = re.sub(r'<p class="description">(.*?)</p>', replace_newlines_in_description, file_content, flags=re.DOTALL)
 
 
 
-            email.BCC = "example1@domain.com.br; example2@domain.com.br"
+                email.BCC = "example1@domain.com.br; example2@domain.com.br"
 
 
 
-            if value == 'do3':
-                email.Subject = f"{str(section_part[i][:8])} (Aeronave) - Resumo Diário Oficial - {formatted_date}"
-            elif value == 'do3 (FAB)':
-                email.Subject = f"{str(section_part[i][:8])} (FAB) - Resumo Diário Oficial - {formatted_date}"
-            elif value == 'doe':
-                email.Subject = f"{str(section_part[7][:7])+str(section_part[7][11:16])} - Resumo Diário Oficial - {formatted_date}"
-            else:
-                email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
-            email.HTMLBody = file_content
-            # Especifica a conta de envio
-            email.SendUsingAccount = outlook.Session.Accounts.Item("example@domain.com.br")
-            email.SentOnBehalfOfName = "example@domain.com.br"
-            email.Send()
-        except:
-            print("Erro ao gerar o email")
+                if value == 'do3':
+                    email.Subject = f"{str(section_part[i][:8])} (Aeronave) - Resumo Diário Oficial - {formatted_date}"
+                elif value == 'do3 (FAB)':
+                    email.Subject = f"{str(section_part[i][:8])} (FAB) - Resumo Diário Oficial - {formatted_date}"
+                elif value == 'doe':
+                    email.Subject = f"{str(section_part[7][:7])+str(section_part[7][11:16])} - Resumo Diário Oficial - {formatted_date}"
+                else:
+                    email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
+                email.HTMLBody = file_content
+                # Especifica a conta de envio
+                email.SendUsingAccount = outlook.Session.Accounts.Item("example@domain.com.br")
+                email.SentOnBehalfOfName = "example@domain.com.br"
+                email.Send()
+            except:
+                print("Erro ao gerar o email")
+        else:
+            print("Envio de e-mails cancelado pelo usuário.")
     else:
         print(f'Não há noticias para os termos procurados hoje em (({value})) {secao[idx]}-{orgPrinc[idx]}-{orgSub[idx]}-{search[idx]}')
