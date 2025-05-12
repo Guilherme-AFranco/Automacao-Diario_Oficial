@@ -47,67 +47,42 @@ with open("html_draft_start_local.txt", "r") as draftStart_file:
 # Abrir o arquivo "html_draft_end_local.txt" e ler o conteúdo
 with open("html_draft_end_local.txt", "r") as draftEnd_file:
     html_draft_end = draftEnd_file.read()
-for idx, value in enumerate(news):
-    if news[value] != {}:
-        with open(f"noticias-{value}.txt", "w") as noticias_file:
-            noticias_file.write(html_draft_start)
-        titulo_part = []
-        body_part = []
-        url_part = []
-        section_part = []
-        pub_date_part = []
-        sub_part = []
-        current_date = previous_business_day(datetime.today())
-        formatted_date = current_date.strftime("%B %d, %Y")
-        html_template = []
-        for i, val in enumerate(title[value].keys()):
-            titulo_part.append(f"{title[value][val]}.")
-            url_part.append(f"{news[value][val]}")
-            section_part.append(f"{section[value][val]}")
-            pub_date_part.append(f"{data[value][val]}")
-            sub_part.append(f"{sub[value][val]}")
-            text[value][val] = text[value][val].replace("<div class=\"texto-dou\"><br> <br> <br>  <p class=\"identifica\">","")
-            text[value][val] = text[value][val].replace("  <p class=\"dou-paragraph\">","")
-            text[value][val] = text[value][val].replace("<p class=\"dou-paragraph\">","")
-            text[value][val] = text[value][val].replace("</p>","")
-            text[value][val] = text[value][val].replace("  <p class=\"assina\">","")
-            text[value][val] = text[value][val].replace("</div>","")
-            text[value][val] = text[value][val].replace("<br>","\n")
-            text[value][val] = text[value][val].replace("<table class=\"dou-table\">","<table class=\"description-table\">")
+confirm = input('Você deseja realizar o envio? (s/n)')
+if confirm.lower() == 's':
+    for idx, value in enumerate(news):
+        if news[value] != {}:
+            with open(f"noticias-{value}.txt", "w") as noticias_file:
+                noticias_file.write(html_draft_start)
+            titulo_part = []
+            body_part = []
+            url_part = []
+            section_part = []
+            pub_date_part = []
+            sub_part = []
+            current_date = previous_business_day(datetime.today())
+            formatted_date = current_date.strftime("%B %d, %Y")
+            html_template = []
+            for i, val in enumerate(title[value].keys()):
+                titulo_part.append(f"{title[value][val]}.")
+                url_part.append(f"{news[value][val]}")
+                section_part.append(f"{section[value][val]}")
+                pub_date_part.append(f"{data[value][val]}")
+                sub_part.append(f"{sub[value][val]}")
+                text[value][val] = text[value][val].replace("<div class=\"texto-dou\"><br> <br> <br>  <p class=\"identifica\">","")
+                text[value][val] = text[value][val].replace("  <p class=\"dou-paragraph\">","")
+                text[value][val] = text[value][val].replace("<p class=\"dou-paragraph\">","")
+                text[value][val] = text[value][val].replace("</p>","")
+                text[value][val] = text[value][val].replace("  <p class=\"assina\">","")
+                text[value][val] = text[value][val].replace("</div>","")
+                text[value][val] = text[value][val].replace("<br>","\n")
+                text[value][val] = text[value][val].replace("<table class=\"dou-table\">","<table class=\"description-table\">")
 
 
-            # Verificar se há dois <p class="identifica"> consecutivos antes de fazer a substituição
-            if "\n  <p class=\"identifica\">" not in text[value][val]:
-                text[value][val] = text[value][val].replace("\n  <p class=\"identifica\">", f"""</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="width: auto; vertical-align: top;">
-                        <h4 style="display: inline; margin-bottom: 0;">
-                            <a href="{str(url_part[i])}">
-                                <span style="color: #ed7d31; font-family: 'Arial Black'; font-size: 11pt;">{str(section_part[i][:8])}|</span>
-                                <span style="color: #002060; font-family: 'Arial Black'; font-size: 11pt;">{str(titulo_part[i])}</span>
-                            </a>
-                        </h4>
-                        <p class="date">{str(sub_part[i])}</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td style="vertical-align: top;">
-                        <p class="date">{str(pub_date_part[i])}</p>
-                        <p class="description">
-                """)
-            text[value][val] = text[value][val].replace("<p class=\"identifica\">","")
-            text[value][val] = text[value][val].replace("<p class=\"cargo\">","")
-            text[value][val] = text[value][val].replace("<div class=\"texto-dou\">","")
-            text[value][val] = text[value][val].replace("<p class=\"titulo\">","")
-            text[value][val] = text[value][val].replace("<p class=\"data\">","")
-            text[value][val] = text[value][val].replace("<p class=\"assinaPr\">","")
-            text[value][val] = text[value][val].replace("<p class=\"ementa\">","")
-            text[value][val] = text[value][val].replace("<p class=\"anexo\">","")
-
-            body_part.append(f"{text[value][val]}")
-            html_template.append(f"""
+                # Verificar se há dois <p class="identifica"> consecutivos antes de fazer a substituição
+                if "\n  <p class=\"identifica\">" not in text[value][val]:
+                    text[value][val] = text[value][val].replace("\n  <p class=\"identifica\">", f"""</p>
+                        </td>
+                    </tr>
                     <tr>
                         <td style="width: auto; vertical-align: top;">
                             <h4 style="display: inline; margin-bottom: 0;">
@@ -122,17 +97,42 @@ for idx, value in enumerate(news):
                     <tr>
                         <td style="vertical-align: top;">
                             <p class="date">{str(pub_date_part[i])}</p>
-                            <p class="description">{str(body_part[i])}</p>
-                        </td>
-                    </tr>
-            """)
-        for i in range(0, int(len(html_template))):
-            with open(f"noticias-{value}.txt","a", encoding="utf-8") as arquivo:
-                arquivo.write(html_template[i])
-        with open(f"noticias-{value}.txt", "a") as noticias_file:
-            noticias_file.write(html_draft_end)
-        confirm = input('Você deseja realizar o envio? (s/n)')
-        if confirm.lower() == 's':
+                            <p class="description">
+                    """)
+                text[value][val] = text[value][val].replace("<p class=\"identifica\">","")
+                text[value][val] = text[value][val].replace("<p class=\"cargo\">","")
+                text[value][val] = text[value][val].replace("<div class=\"texto-dou\">","")
+                text[value][val] = text[value][val].replace("<p class=\"titulo\">","")
+                text[value][val] = text[value][val].replace("<p class=\"data\">","")
+                text[value][val] = text[value][val].replace("<p class=\"assinaPr\">","")
+                text[value][val] = text[value][val].replace("<p class=\"ementa\">","")
+                text[value][val] = text[value][val].replace("<p class=\"anexo\">","")
+
+                body_part.append(f"{text[value][val]}")
+                html_template.append(f"""
+                        <tr>
+                            <td style="width: auto; vertical-align: top;">
+                                <h4 style="display: inline; margin-bottom: 0;">
+                                    <a href="{str(url_part[i])}">
+                                        <span style="color: #ed7d31; font-family: 'Arial Black'; font-size: 11pt;">{str(section_part[i][:8])}|</span>
+                                        <span style="color: #002060; font-family: 'Arial Black'; font-size: 11pt;">{str(titulo_part[i])}</span>
+                                    </a>
+                                </h4>
+                                <p class="date">{str(sub_part[i])}</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="vertical-align: top;">
+                                <p class="date">{str(pub_date_part[i])}</p>
+                                <p class="description">{str(body_part[i])}</p>
+                            </td>
+                        </tr>
+                """)
+            for i in range(0, int(len(html_template))):
+                with open(f"noticias-{value}.txt","a", encoding="utf-8") as arquivo:
+                    arquivo.write(html_template[i])
+            with open(f"noticias-{value}.txt", "a") as noticias_file:
+                noticias_file.write(html_draft_end)
             try:
                 ## Gerando o email ##
                 outlook = win32.Dispatch('Outlook.Application') # cria integração com o outlook
@@ -165,6 +165,6 @@ for idx, value in enumerate(news):
             except:
                 print("Erro ao gerar o email")
         else:
-            print("Envio de e-mails cancelado pelo usuário.")
-    else:
-        print(f'Não há noticias para os termos procurados hoje em (({value})) {secao[idx]}-{orgPrinc[idx]}-{orgSub[idx]}-{search[idx]}')
+            print(f'Não há noticias para os termos procurados hoje em (({value})) {secao[idx]}-{orgPrinc[idx]}-{orgSub[idx]}-{search[idx]}')
+else:
+    print("Envio de e-mails cancelado pelo usuário.")
