@@ -3,11 +3,12 @@ from datetime import datetime
 from Scrapping import *
 import re
 
-# Coleta das informações da web ##
-secao = ["do1", "do1", "do1", "do2", "do2", "do3", "do3", "doe"] # Seções a analisar
-search = ["", "", "", "", "",  "aeronave", "", ""] # Pesquisas a analisar com base nas seções
-orgPrinc = ["Atos do Poder Executivo", "Ministério da Defesa", "Ministério da Defesa", "Atos do Poder Executivo", "Ministério da Defesa", "", "Ministério da Defesa", ""]
-orgSub = ["", "Comando da Aeronáutica", "Gabinete do Ministro", "", "Comando da Aeronáutica", "", "Comando da Aeronáutica", ""]
+# Coleta das informações da web
+secao = ["do1", "do1", "do1", "do2", "do2", "do3", "do3", "doe","doe"] # Seções a analisar
+search = ["", "", "", "", "",  "aeronave", "", ["", "", "", "", "", ""],  "aeronave"] # Pesquisas a analisar com base nas seções
+orgPrinc = ["Ministério da Defesa", "Ministério da Defesa", "Atos do Poder Executivo", "Ministério da Defesa", "Atos do Poder Executivo", "", "Ministério da Defesa", ["Ministério da Defesa", "Ministério da Defesa", "Atos do Poder Executivo", "Ministério da Defesa", "Atos do Poder Executivo", "Ministério da Defesa"], ""]
+orgSub = ["Gabinete do Ministro", "Comando da Aeronáutica", "", "Comando da Aeronáutica", "", "", "Comando da Aeronáutica", ["Gabinete do Ministro", "Comando da Aeronáutica", "", "Comando da Aeronáutica", "", "Comando da Aeronáutica"], ""]
+secaoExtra = [None, None, None, None, None, None, None, ["Seção 1", "Seção 1", "Seção 1", "Seção 2", "Seção 2", "Seção 3"], "Seção 3"]
 
 news = {}
 title = {}
@@ -23,10 +24,17 @@ for i, value in enumerate(secao):
         subject = secao[i]
     if subject.startswith(secao[i]) and not subject.endswith('FAB') and subject in news:
         idx = len(news[subject])
-        try:
-            n, t, tx, s, d, sb  = scrapping(secao[i],search[i], orgPrinc[i], orgSub[i],idx)
-        except:
-            print('Erro na coleta')
+        erroIdx = 0
+        while erroIdx<10:
+            try:
+                n, t, tx, s, d, sb,formatted_date  = scrapping(secao[i],search[i], orgPrinc[i], orgSub[i],idx, secaoExtra[i])
+                break
+            except Exception as e:
+                erroIdx += 1
+                print('Erro na coleta')
+        if erroIdx == 10:
+            print(f'Não foi possível corrigir o erro. {e}')
+            time.sleep(300)
         news[subject] = {**n,**news[subject]}
         title[subject] = {**t,**title[subject]}
         text[subject] = {**tx,**text[subject]}
@@ -35,10 +43,17 @@ for i, value in enumerate(secao):
         sub[subject] = {**sb,**sub[subject]}
     else:
         idx = 0
-        try:
-            news[subject], title[subject], text[subject], section[subject], data[subject], sub[subject]  = scrapping(secao[i],search[i], orgPrinc[i], orgSub[i],idx)
-        except:
-            print('Erro na coleta')
+        erroIdx = 0
+        while erroIdx<10:
+            try:
+                news[subject], title[subject], text[subject], section[subject], data[subject], sub[subject],formatted_date  = scrapping(secao[i],search[i], orgPrinc[i], orgSub[i],idx,secaoExtra[i])
+                break
+            except Exception as e:
+                erroIdx += 1
+                print('Erro na coleta')
+        if erroIdx == 10:
+            print(f'Não foi possível corrigir o erro. {e}')
+            time.sleep(300)
 
 ## Inserção dos dados em arquivos .txt separados ##
 # Abrir o arquivo "html_draft_start_local.txt" e ler o conteúdo
@@ -59,8 +74,9 @@ if confirm.lower() == 's':
             section_part = []
             pub_date_part = []
             sub_part = []
-            current_date = previous_business_day(datetime.today())
-            formatted_date = current_date.strftime("%B %d, %Y")
+            # current_date = previous_business_day(datetime.today())
+            # formatted_date = current_date.strftime("%B %d, %Y")
+            # formatted_date = '' # Modificar manualmente quando houver feriados
             html_template = []
             for i, val in enumerate(title[value].keys()):
                 titulo_part.append(f"{title[value][val]}.")
@@ -151,12 +167,16 @@ if confirm.lower() == 's':
 
                 if value == 'do3':
                     email.Subject = f"{str(section_part[i][:8])} (Aeronave) - Resumo Diário Oficial - {formatted_date}"
+                    # email.Subject = f"Retroactive day {formatted_date}: {str(section_part[i][:8])} (Aeronave) - Resumo Diário Oficial"
                 elif value == 'do3 (FAB)':
                     email.Subject = f"{str(section_part[i][:8])} (FAB) - Resumo Diário Oficial - {formatted_date}"
+                    # email.Subject = f"Retroactive day {formatted_date}: {str(section_part[i][:8])} (FAB) - Resumo Diário Oficial"
                 elif value == 'doe':
-                    email.Subject = f"{str(section_part[7][:7])+str(section_part[7][11:16])} - Resumo Diário Oficial - {formatted_date}"
+                    email.Subject = f"{str(section_part[i][:7])+str(section_part[i][11:16])} - Resumo Diário Oficial - {formatted_date}"
+                    # email.Subject = f"Retroactive day {formatted_date}: {str(section_part[i][:7])+str(section_part[i][11:16])} - Resumo Diário Oficial"
                 else:
                     email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
+                    # email.Subject = f"Retroactive day {formatted_date}: {str(section_part[i][:8])} - Resumo Diário Oficial"
                 email.HTMLBody = file_content
                 # Especifica a conta de envio
                 email.SendUsingAccount = outlook.Session.Accounts.Item("example@domain.com.br")
