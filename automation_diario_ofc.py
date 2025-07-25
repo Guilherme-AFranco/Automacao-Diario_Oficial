@@ -9,14 +9,12 @@ search = ["", "", "", "", "",  "aeronave", "", ["", "", "", "", "", ""],  "aeron
 orgPrinc = ["Ministério da Defesa", "Ministério da Defesa", "Atos do Poder Executivo", "Ministério da Defesa", "Atos do Poder Executivo", "", "Ministério da Defesa", ["Ministério da Defesa", "Ministério da Defesa", "Atos do Poder Executivo", "Ministério da Defesa", "Atos do Poder Executivo", "Ministério da Defesa"], ""]
 orgSub = ["Gabinete do Ministro", "Comando da Aeronáutica", "", "Comando da Aeronáutica", "", "", "Comando da Aeronáutica", ["Gabinete do Ministro", "Comando da Aeronáutica", "", "Comando da Aeronáutica", "", "Comando da Aeronáutica"], ""]
 secaoExtra = [None, None, None, None, None, None, None, ["Seção 1", "Seção 1", "Seção 1", "Seção 2", "Seção 2", "Seção 3"], "Seção 3"]
-
 news = {}
 title = {}
 text = {}
 data = {}
 section = {}
 sub = {}
-
 for i, value in enumerate(secao):
     if secao[i] == 'do3' and orgSub[i]=='Comando da Aeronáutica':
         subject = f'{secao[i]} (FAB)'
@@ -54,7 +52,6 @@ for i, value in enumerate(secao):
         if erroIdx == 10:
             print(f'Não foi possível corrigir o erro. {e}')
             time.sleep(300)
-
 ## Inserção dos dados em arquivos .txt separados ##
 # Abrir o arquivo "html_draft_start_local.txt" e ler o conteúdo
 with open("html_draft_start_local.txt", "r") as draftStart_file:
@@ -74,9 +71,6 @@ if confirm.lower() == 's':
             section_part = []
             pub_date_part = []
             sub_part = []
-            # current_date = previous_business_day(datetime.today())
-            # formatted_date = current_date.strftime("%B %d, %Y")
-            # formatted_date = '' # Modificar manualmente quando houver feriados
             html_template = []
             for i, val in enumerate(title[value].keys()):
                 titulo_part.append(f"{title[value][val]}.")
@@ -92,8 +86,6 @@ if confirm.lower() == 's':
                 text[value][val] = text[value][val].replace("</div>","")
                 text[value][val] = text[value][val].replace("<br>","\n")
                 text[value][val] = text[value][val].replace("<table class=\"dou-table\">","<table class=\"description-table\">")
-
-
                 # Verificar se há dois <p class="identifica"> consecutivos antes de fazer a substituição
                 if "\n  <p class=\"identifica\">" not in text[value][val]:
                     text[value][val] = text[value][val].replace("\n  <p class=\"identifica\">", f"""</p>
@@ -123,7 +115,6 @@ if confirm.lower() == 's':
                 text[value][val] = text[value][val].replace("<p class=\"assinaPr\">","")
                 text[value][val] = text[value][val].replace("<p class=\"ementa\">","")
                 text[value][val] = text[value][val].replace("<p class=\"anexo\">","")
-
                 body_part.append(f"{text[value][val]}")
                 html_template.append(f"""
                         <tr>
@@ -153,18 +144,19 @@ if confirm.lower() == 's':
                 ## Gerando o email ##
                 outlook = win32.Dispatch('Outlook.Application') # cria integração com o outlook
                 email = outlook.CreateItem(0) # Cria e-mail
-                # Configurações do e-mail
                 with open(f"noticias-{value}.txt","r", encoding="utf-8") as file:
                     file_content = file.read()
-                # Usar regex para encontrar e substituir o conteúdo dentro de <p class="description"></p>
                 file_content = re.sub(r'<p class="description">(.*?)</p>', replace_newlines_in_description, file_content, flags=re.DOTALL)
 
 
 
+                # Endereco de email dos destinatarios
                 email.BCC = "example1@domain.com.br; example2@domain.com.br"
 
 
 
+                # Se alterar o dia manualmente, é importante descomentar as linhas de assunto do email abaixo (àquelas que iniciam com Retroactive day.)
+                # IMPORTANTE: Volte a comentá-las - colocar o # no início - após o uso para não esquecer no próximo dia
                 if value == 'do3':
                     email.Subject = f"{str(section_part[i][:8])} (Aeronave) - Resumo Diário Oficial - {formatted_date}"
                     # email.Subject = f"Retroactive day {formatted_date}: {str(section_part[i][:8])} (Aeronave) - Resumo Diário Oficial"
@@ -178,9 +170,13 @@ if confirm.lower() == 's':
                     email.Subject = f"{str(section_part[i][:8])} - Resumo Diário Oficial - {formatted_date}"
                     # email.Subject = f"Retroactive day {formatted_date}: {str(section_part[i][:8])} - Resumo Diário Oficial"
                 email.HTMLBody = file_content
+
+
                 # Especifica a conta de envio
                 email.SendUsingAccount = outlook.Session.Accounts.Item("example@domain.com.br")
                 email.SentOnBehalfOfName = "example@domain.com.br"
+
+
                 email.Send()
             except:
                 print("Erro ao gerar o email")
