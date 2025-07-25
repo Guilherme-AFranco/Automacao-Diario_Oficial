@@ -52,41 +52,25 @@ Antes de executar a automação, é importante configurar alguns campos conforme
 Para o primeiro uso, será necessário incluir algumas informações pessoais nos seus arquivos.
 
 - automation_diario_ofc.py:
-
-Linha 154: `email.BCC = "example1@domain.com.br; example2@domain.com.br"`
-
-Ação: Inclua os e-mails dos destinatários seguindo o formato indicado.
-
-Linha 176: `email.SendUsingAccount = outlook.Session.Accounts.Item("example@domain.com.br")`
-
-Ação: Inclua o seu e-mail do Outlook.
-
-Linha 177: `email.SentOnBehalfOfName = "example@domain.com.br"`
-
-Ação: Inclua o endereço de email secundário (será o remetente que aparecerá para os destinatários).
-
+  - Linha 154: `email.BCC = "example1@domain.com.br; example2@domain.com.br"`
+    Ação: Inclua os e-mails dos destinatários seguindo o formato indicado.
+- - Linha 176: `email.SendUsingAccount = outlook.Session.Accounts.Item("example@domain.com.br")`
+    Ação: Inclua o seu e-mail do Outlook.
+  - Linha 177: `email.SentOnBehalfOfName = "example@domain.com.br"`
+    Ação: Inclua o endereço de email secundário (será o remetente que aparecerá para os destinatários).
 - automacao_DOD.bat:
-
-Linha 3: `call "C:\Seu\diretorio\de\arquivos\venv\Scripts\activate"`
-
-Ação: Inclua o diretório que estão alocados os seus arquivos seguindo o modelo acima. Não esqueça que o final do diretório deve ser `\venv\Scripts\activate`.
-
-Linha 11: `cd "C:\Seu\diretorio\de\arquivos"`
-
-Ação: Inclua seu diretório onde estão alocados os arquivos. Note que aqui é apenas o diretório mesmo.
+- - Linha 3: `call "C:\Seu\diretorio\de\arquivos\venv\Scripts\activate"`
+    Ação: Inclua o diretório que estão alocados os seus arquivos seguindo o modelo acima. Não esqueça que o final do diretório deve ser `\venv\Scripts\activate`.
+  - Linha 11: `cd "C:\Seu\diretorio\de\arquivos"`
+    Ação: Inclua seu diretório onde estão alocados os arquivos. Note que aqui é apenas o diretório mesmo.
 
 **Publicação de Dias Retroativos**
 
 Caso não seja possível publicar a automação em algum dia específico (como os dias anteriores à feriados ou por instabilidade no site), é importante realizar algumas alteraçãos, **que devem ser desfeitas após o uso**. Isso pode ser feito utilizando o VSCode (mais intuitivo) ou abrindo os arquivos no bloco de notas.
 
 - Alteração no arquivo Scrapping.py:
-
-Linha 49: `# data_formatada = "DD/MM/AAAA"`
-
-Ação: Descomentar e incluir a data que deseja realizar a coleta, seguindo o formato DD/MM/AAAA. Após alterar, certifique-se de salvar as alterações ("Ctrl+S").
-
+- - Linha 49: `# data_formatada = "DD/MM/AAAA"`
+    Ação: Descomentar e incluir a data que deseja realizar a coleta, seguindo o formato DD/MM/AAAA. Após alterar, certifique-se de salvar as alterações ("Ctrl+S").
 - Alteração no arquivo automation_diario_ofc.py:
-
-Linhas 162, 165, 168, 171: `# email.Subject = f"Retroactive day {formatted_date}:.......`
-
-Ação: Descomentar e salvar as alterações no arquivo.
+- - Linhas 162, 165, 168, 171: `# email.Subject = f"Retroactive day {formatted_date}:.......`
+  - Ação: Descomentar e salvar as alterações no arquivo.
