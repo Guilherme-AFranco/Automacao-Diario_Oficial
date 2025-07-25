@@ -2,7 +2,8 @@
 
 **Instalação do ChromeDriver**
 - Verifique a versão do seu navegador Google Chrome em: ... - Ajuda - Sobre o Google Chrome;
-- Acesse [Chromedriver]([https://chromedriver.storage.googleapis.com/index.html?path=114.0.5735.90/](https://sites.google.com/chromium.org/driver/)](https://googlechromelabs.github.io/chrome-for-testing/));
+- Acesse [Chromedriver](https://googlechromelabs.github.io/chrome-for-testing/);
+- Encontre a mesma versão do seu navegado;
 - Faça download do .zip;
 - Extraia em um local conhecido;
 - Dentro do Windows Explorer, clique com o botão direito em "Meu Computador" e selecione Propriedades;
