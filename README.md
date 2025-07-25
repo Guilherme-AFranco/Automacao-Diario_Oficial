@@ -5,12 +5,7 @@
 - Acesse [Chromedriver](https://googlechromelabs.github.io/chrome-for-testing/);
 - Encontre a mesma versão do seu navegado;
 - Faça download do .zip;
-- Extraia em um local conhecido;
-- Dentro do Windows Explorer, clique com o botão direito em "Meu Computador" e selecione Propriedades;
-- Vá em Configurações Avançadas do Sistema > Variáveis de Ambiente;
-- Na seção Variáveis do Sistema, localize Path, clique em Editar;
-- Adicione o caminho completo da pasta do ChromeDriver, por exemplo: C:\WebDriver;
-- Salve.
+- Extraia em um local conhecido (recomendável que seja dentro do disco local e que seja na mesma página que serão armazenados os arquivos da automação).
 
 **Criação e uso do ambiente virtual**
 - Abra o VSCode e entre na pasta onde estão os arquivos do Dashboard;
