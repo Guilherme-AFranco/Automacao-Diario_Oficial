@@ -68,6 +68,17 @@ Para o primeiro uso, será necessário incluir algumas informações pessoais no
   - Linha 11: `cd "C:\Seu\diretorio\de\arquivos"`
 
     Ação: Inclua seu diretório onde estão alocados os arquivos. Note que aqui é apenas o diretório mesmo.
+- html_draft_start.txt:
+  - Linha 7: <title>Diário Oficial / Company</title>
+
+    Ação: Incluir a área/empresa no início da mensagem.
+- html_draft_end.txt:
+  - Linha 7: <p> Signature </p>
+
+    Ação: Influir a assinatura.
+  - Linha 9: <img src="https://IMAGEM.com" alt="" width="144" height="40"
+
+    Ação: Incluir o html de um logo da empresa que esteja disponível na web.
 
 **Publicação de Dias Retroativos**
 
