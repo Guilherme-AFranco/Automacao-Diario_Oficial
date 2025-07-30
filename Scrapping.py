@@ -183,9 +183,12 @@ def scrapping(secao,search,orgPrinc,orgSub,index,secaoExtra):
                         WebDriverWait(driver, 10).until(
                             EC.presence_of_all_elements_located((By.CLASS_NAME, "dou-paragraph"))
                         ) # Esperar o texto da notícia carregar
-                    except:
-                        print('A página não carregou')
-                        time.sleep(300)
+                    except Exception as e:
+                        WebDriverWait(driver, 10).until(
+                            EC.presence_of_all_elements_located((By.CLASS_NAME, "identifica"))
+                        ) # Esperar o texto da notícia carregar
+                        print('A página não carregou corretamente', e)
+                        time.sleep(30)
                     titulo_dou[f'Noticia {i}{subject}'] = driver.find_element(By.CLASS_NAME, "identifica").text # Coletar titulo
                     texto_dou[f'Noticia {i}{subject}'] = driver.find_element(By.CLASS_NAME, "texto-dou").get_attribute('outerHTML') # Coletar notícia
                     data_dou[f'Noticia {i}{subject}'] = driver.find_element(By.CLASS_NAME, "publicado-dou-data").text # Coletar data
