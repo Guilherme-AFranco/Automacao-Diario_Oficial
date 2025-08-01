@@ -49,6 +49,7 @@
 Antes de executar a automação, é importante configurar alguns campos conforme o seu uso. Para isso, deixo destacado aqui quais campos serão necessários realizar ajustes:
 
 **Configurações Finais**
+
 Para o primeiro uso, será necessário incluir algumas informações pessoais nos seus arquivos.
 
 - automation_diario_ofc.py:
