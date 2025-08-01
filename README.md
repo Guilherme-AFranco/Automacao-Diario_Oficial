@@ -94,4 +94,5 @@ Caso não seja possível publicar a automação em algum dia específico (como o
     Ação: Descomentar e salvar as alterações no arquivo.
 
 **Atualização do Chromedriver**
+
 Geralmente erros que acontecem na automação é por conta do chromedriver desatualizado. Então quando houver erro, baixe a versão atualizada do chromedriver e substitua-o na pasta da automação.
